@@ -1,0 +1,52 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: brianreiss
+      POSTGRES_DB: brianreiss
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - brianreiss-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brianreiss"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgres://brianreiss:${DB_PASSWORD}@postgres:5432/brianreiss
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 3001
+    depends_on:
+      postgres:
+        condition: service_healthy
+    expose:
+      - "3001"
+    networks:
+      - internal
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      - backend
+    expose:
+      - "80"
+    networks:
+      - internal
+
+volumes:
+  brianreiss-postgres:
+    name: brianreiss-postgres
+
+networks:
+  internal:
