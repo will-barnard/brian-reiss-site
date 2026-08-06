@@ -24,7 +24,9 @@ export async function loadSite() {
   }
 }
 
+const THEMES = ['sky', 'purple', 'green', 'dusk', 'twilight', 'aurora'];
+
 export function applyTheme(theme) {
-  const t = ['sky', 'purple', 'green'].includes(theme) ? theme : 'sky';
+  const t = THEMES.includes(theme) ? theme : 'sky';
   document.documentElement.setAttribute('data-theme', t);
 }

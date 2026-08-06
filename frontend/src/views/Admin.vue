@@ -217,9 +217,16 @@ async function deleteMessage(m) {
           <div class="field">
             <label>Color theme</label>
             <select v-model="settings.theme" class="select">
-              <option value="sky">Cognac (default)</option>
-              <option value="purple">Burgundy</option>
-              <option value="green">Forest</option>
+              <optgroup label="Sky gradients">
+                <option value="dusk">Dusk (blue)</option>
+                <option value="twilight">Twilight (purple)</option>
+                <option value="aurora">Aurora (green)</option>
+              </optgroup>
+              <optgroup label="Cover cloth">
+                <option value="sky">Cognac (default)</option>
+                <option value="purple">Burgundy</option>
+                <option value="green">Forest</option>
+              </optgroup>
             </select>
           </div>
           <div class="field">

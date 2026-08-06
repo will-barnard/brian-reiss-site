@@ -12,17 +12,27 @@
   --ink-rgb: 43, 32, 19;
 
   /* Default (cognac) cover palette — overridden by [data-theme] below.
-     --grad-top/--grad-mid/--grad-light/--grad-bottom now describe a
-     cloth/leather cover instead of a sky, and feed the deckle-edge
-     panels + card-media placeholders. */
+     --grad-top/--grad-mid/--grad-light/--grad-bottom describe the big
+     panel colour (cover cloth for the earth tones, sky bands for the
+     dusk/twilight/aurora tones) and also feed the card-media
+     placeholders. --panel-gradient is the actual paint used on
+     .sky-gradient panels, so each theme can use a different structure
+     (diagonal sheen for a cover, vertical dark-light-dark for a sky). */
   --grad-top: #24140c;
   --grad-mid: #5c3a21;
   --grad-light: #8a6136;
   --grad-bottom: #24140c;
+  --grad-glow: transparent;
   --accent: #d8b26c;
   --accent-strong: #93641d;
   --on-dark: #f3e6cd;
   --on-dark-soft: #d4bd93;
+  --panel-gradient: linear-gradient(
+    165deg,
+    var(--grad-light) 0%,
+    var(--grad-mid) 28%,
+    var(--grad-top) 100%
+  );
 }
 
 [data-theme='purple'] {
@@ -47,6 +57,87 @@
   --accent-strong: #46623a;
   --on-dark: #eaf0e4;
   --on-dark-soft: #bcd0bf;
+}
+
+/* ---- Sky palettes: a proper dark-to-light-and-back gradient, like the
+   jacket of a book printed with a dusk sky, rather than the cover-cloth
+   diagonal used by the earth tones above. ---- */
+[data-theme='dusk'] {
+  /* Blue dusk sky */
+  --grad-top: #0b1a33;
+  --grad-mid: #3d6a9c;
+  --grad-light: #dce8f6;
+  --grad-bottom: #0b1a33;
+  --grad-glow: #f3c9a0;
+  --accent: #f4d58c;
+  --accent-strong: #3c6690;
+  --on-dark: #eef4fc;
+  --on-dark-soft: #b9c9dc;
+  --panel-gradient: radial-gradient(
+      ellipse 120% 65% at 50% 46%,
+      color-mix(in srgb, var(--grad-glow) 45%, transparent) 0%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      var(--grad-top) 0%,
+      var(--grad-mid) 32%,
+      var(--grad-light) 53%,
+      var(--grad-mid) 75%,
+      var(--grad-bottom) 100%
+    );
+}
+
+[data-theme='twilight'] {
+  /* Purple dusk sky */
+  --grad-top: #1c0f2e;
+  --grad-mid: #6a4a94;
+  --grad-light: #ecdff5;
+  --grad-bottom: #1c0f2e;
+  --grad-glow: #e3b8c9;
+  --accent: #e6c9f0;
+  --accent-strong: #7a4f95;
+  --on-dark: #f1e6f7;
+  --on-dark-soft: #cbb3d9;
+  --panel-gradient: radial-gradient(
+      ellipse 120% 65% at 50% 46%,
+      color-mix(in srgb, var(--grad-glow) 45%, transparent) 0%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      var(--grad-top) 0%,
+      var(--grad-mid) 32%,
+      var(--grad-light) 53%,
+      var(--grad-mid) 75%,
+      var(--grad-bottom) 100%
+    );
+}
+
+[data-theme='aurora'] {
+  /* Green night sky, shot through with aurora violet */
+  --grad-top: #08201c;
+  --grad-mid: #1f6b57;
+  --grad-light: #d9f5e6;
+  --grad-bottom: #08201c;
+  --grad-glow: #b98ee0;
+  --accent: #cfe3a0;
+  --accent-strong: #1c5b49;
+  --on-dark: #e7f7ef;
+  --on-dark-soft: #b8dcc9;
+  --panel-gradient: radial-gradient(
+      ellipse 120% 65% at 50% 46%,
+      color-mix(in srgb, var(--grad-glow) 40%, transparent) 0%,
+      transparent 68%
+    ),
+    linear-gradient(
+      180deg,
+      var(--grad-top) 0%,
+      var(--grad-mid) 32%,
+      var(--grad-light) 53%,
+      var(--grad-mid) 75%,
+      var(--grad-bottom) 100%
+    );
 }
 
 * {
@@ -98,7 +189,7 @@ img {
 .sky-gradient {
   position: relative;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
-    linear-gradient(165deg, var(--grad-light) 0%, var(--grad-mid) 28%, var(--grad-top) 100%);
+    var(--panel-gradient);
   isolation: isolate;
 }
 .sky-gradient::after {
