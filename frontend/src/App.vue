@@ -33,6 +33,11 @@ function close() {
   </div>
 
   <div v-else>
+    <div class="site-loader" :class="{ 'is-done': store.loaded }" aria-hidden="true">
+      <div class="site-loader-mark">{{ brand }}</div>
+      <div class="site-loader-bar"><span></span></div>
+    </div>
+
     <header class="nav">
       <div class="container nav-inner">
         <router-link class="nav-brand" to="/" @click="close">{{ brand }}</router-link>

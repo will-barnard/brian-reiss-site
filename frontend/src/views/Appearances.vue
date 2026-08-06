@@ -93,10 +93,16 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
   margin: 0 0 0.9rem;
 }
 .entry-img {
+  aspect-ratio: 16 / 9;
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 1rem;
   box-shadow: 0 14px 36px rgba(43, 32, 19, 0.14);
+}
+.entry-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 @media (max-width: 680px) {
   .entry {

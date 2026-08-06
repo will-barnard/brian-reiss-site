@@ -206,6 +206,87 @@ img {
     repeat-x bottom / 42px 18px;
 }
 
+/* ---------- Loading overlay ----------
+   Content is fetched once on boot; instead of letting the page render
+   empty, then "jump" into place as data streams in, we mask the whole
+   viewport with a paper-toned overlay and only reveal the (already
+   fully laid-out) page underneath once loading has finished. */
+.site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+.site-loader.is-done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.site-loader-mark {
+  font-family: var(--font-serif);
+  font-size: 1.4rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+.site-loader-bar {
+  width: 130px;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(var(--ink-rgb), 0.14);
+  overflow: hidden;
+}
+.site-loader-bar span {
+  display: block;
+  height: 100%;
+  width: 36%;
+  border-radius: 2px;
+  background: var(--accent-strong);
+  animation: loader-sweep 1.15s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+@keyframes loader-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(380%);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .site-loader-bar span {
+    animation: none;
+  }
+}
+
+/* ---------- Image transitions ---------- */
+/* Every image eases in on mount instead of popping in the instant its
+   bytes arrive — most site imagery sits in a fixed aspect-ratio box
+   already, so this only ever affects opacity, never layout. */
+img {
+  animation: img-fade-in 0.45s ease both;
+}
+@keyframes img-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  img {
+    animation: none;
+  }
+}
+
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
