@@ -65,7 +65,7 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
   display: grid;
   grid-template-columns: 180px 1fr;
   gap: 2rem;
-  border-left: 2px solid rgba(16, 35, 63, 0.1);
+  border-left: 2px solid rgba(43, 32, 19, 0.1);
   padding-left: 2rem;
 }
 .entry-meta {
@@ -96,7 +96,7 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
   border-radius: 14px;
   overflow: hidden;
   margin-bottom: 1rem;
-  box-shadow: 0 14px 36px rgba(16, 35, 63, 0.14);
+  box-shadow: 0 14px 36px rgba(43, 32, 19, 0.14);
 }
 @media (max-width: 680px) {
   .entry {

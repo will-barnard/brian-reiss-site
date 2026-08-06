@@ -115,7 +115,7 @@ async function submit() {
   aspect-ratio: 4 / 5;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(16, 35, 63, 0.16);
+  box-shadow: 0 20px 50px rgba(43, 32, 19, 0.16);
   background: linear-gradient(160deg, var(--grad-mid), var(--grad-top));
 }
 .about-photo img {
@@ -140,7 +140,7 @@ async function submit() {
 }
 .contact-band {
   background: var(--paper);
-  border-top: 1px solid rgba(16, 35, 63, 0.08);
+  border-top: 1px solid rgba(43, 32, 19, 0.08);
 }
 .contact-grid {
   display: grid;
@@ -149,10 +149,10 @@ async function submit() {
   align-items: start;
 }
 .contact-form {
-  background: #fff;
+  background: #fffaf1;
   padding: 1.8rem;
   border-radius: 18px;
-  box-shadow: 0 16px 44px rgba(16, 35, 63, 0.1);
+  box-shadow: 0 16px 44px rgba(43, 32, 19, 0.1);
 }
 @media (max-width: 780px) {
   .about-grid,

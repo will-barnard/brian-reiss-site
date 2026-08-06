@@ -65,11 +65,11 @@ const blurb = computed(() => (store.settings.artists || {}).blurb || '');
   display: grid;
   grid-template-columns: 120px 1fr;
   gap: 1.4rem;
-  background: #fff;
+  background: #fffaf1;
   border-radius: 18px;
   padding: 1.5rem;
-  box-shadow: 0 12px 34px rgba(16, 35, 63, 0.09);
-  border: 1px solid rgba(16, 35, 63, 0.06);
+  box-shadow: 0 12px 34px rgba(43, 32, 19, 0.09);
+  border: 1px solid rgba(43, 32, 19, 0.06);
 }
 .artist-img {
   width: 120px;

@@ -144,9 +144,9 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
   text-decoration: none;
   padding: 1.8rem;
   border-radius: 18px;
-  background: #fff;
-  border: 1px solid rgba(16, 35, 63, 0.07);
-  box-shadow: 0 12px 34px rgba(16, 35, 63, 0.08);
+  background: #fffaf1;
+  border: 1px solid rgba(43, 32, 19, 0.07);
+  box-shadow: 0 12px 34px rgba(43, 32, 19, 0.08);
   transition: transform 0.2s ease;
 }
 .tile:hover {

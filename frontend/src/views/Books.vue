@@ -61,7 +61,7 @@ const books = computed(() => store.books);
   aspect-ratio: 3 / 4;
   border-radius: 14px;
   overflow: hidden;
-  box-shadow: 0 16px 40px rgba(16, 35, 63, 0.16);
+  box-shadow: 0 16px 40px rgba(43, 32, 19, 0.16);
   background: linear-gradient(160deg, var(--grad-mid), var(--grad-top));
   display: flex;
   align-items: center;

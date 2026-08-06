@@ -101,10 +101,10 @@ async function submit() {
   align-items: start;
 }
 .ask-form {
-  background: #fff;
+  background: #fffaf1;
   padding: 1.8rem;
   border-radius: 18px;
-  box-shadow: 0 16px 44px rgba(16, 35, 63, 0.1);
+  box-shadow: 0 16px 44px rgba(43, 32, 19, 0.1);
   position: sticky;
   top: 90px;
 }

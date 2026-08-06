@@ -2,48 +2,51 @@
   --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 
-  /* Default (sky) palette — overridden by [data-theme] below */
-  --grad-top: #0b1e3f;
-  --grad-mid: #4a7fb5;
-  --grad-light: #cfe4f5;
-  --grad-bottom: #0b1e3f;
-  --accent: #f4c98a;
-  --accent-strong: #e9a94d;
-  --ink: #10233f;
-  --ink-soft: #46566e;
-  --paper: #f7fafe;
-  --card: rgba(255, 255, 255, 0.86);
-  --card-border: rgba(255, 255, 255, 0.7);
-  --on-dark: #eaf3fb;
-  --on-dark-soft: #b8cbe0;
+  /* Paper stays the same regardless of cover colour — every book is
+     printed on the same cream stock. */
+  --ink: #2b2013;
+  --ink-soft: #6b5c47;
+  --paper: #f6efe0;
+  --card: rgba(255, 252, 246, 0.88);
+  --card-border: rgba(43, 32, 19, 0.09);
+  --ink-rgb: 43, 32, 19;
+
+  /* Default (cognac) cover palette — overridden by [data-theme] below.
+     --grad-top/--grad-mid/--grad-light/--grad-bottom now describe a
+     cloth/leather cover instead of a sky, and feed the deckle-edge
+     panels + card-media placeholders. */
+  --grad-top: #24140c;
+  --grad-mid: #5c3a21;
+  --grad-light: #8a6136;
+  --grad-bottom: #24140c;
+  --accent: #d8b26c;
+  --accent-strong: #93641d;
+  --on-dark: #f3e6cd;
+  --on-dark-soft: #d4bd93;
 }
 
 [data-theme='purple'] {
-  --grad-top: #1a0e33;
-  --grad-mid: #7b4bb0;
-  --grad-light: #e7d6f5;
-  --grad-bottom: #1a0e33;
-  --accent: #f0b5e6;
-  --accent-strong: #d06fc0;
-  --ink: #24123f;
-  --ink-soft: #55476b;
-  --paper: #faf6ff;
-  --on-dark: #f2e9fb;
-  --on-dark-soft: #cbb8e0;
+  /* Burgundy cloth */
+  --grad-top: #230c11;
+  --grad-mid: #5e1f2d;
+  --grad-light: #8a4152;
+  --grad-bottom: #230c11;
+  --accent: #e3b98f;
+  --accent-strong: #9c4a3f;
+  --on-dark: #f3e2d8;
+  --on-dark-soft: #d6b3a8;
 }
 
 [data-theme='green'] {
-  --grad-top: #0a2418;
-  --grad-mid: #3f8b63;
-  --grad-light: #d3efdc;
-  --grad-bottom: #0a2418;
-  --accent: #f2d98a;
-  --accent-strong: #d8b24a;
-  --ink: #123024;
-  --ink-soft: #46664f;
-  --paper: #f5fbf6;
-  --on-dark: #e9f6ec;
-  --on-dark-soft: #bcd7c3;
+  /* Forest cloth */
+  --grad-top: #10241a;
+  --grad-mid: #234a34;
+  --grad-light: #4f7a5c;
+  --grad-bottom: #10241a;
+  --accent: #d7c37a;
+  --accent-strong: #46623a;
+  --on-dark: #eaf0e4;
+  --on-dark-soft: #bcd0bf;
 }
 
 * {
@@ -59,7 +62,8 @@ body {
 body {
   font-family: var(--font-sans);
   color: var(--ink);
-  background: var(--paper);
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
   -webkit-font-smoothing: antialiased;
   line-height: 1.6;
 }
@@ -89,16 +93,26 @@ img {
   margin: 0 auto;
 }
 
-/* The sky: dark at top -> light in the middle -> dark at the bottom */
+/* A book cover: a cloth/leather panel with a soft woven sheen, torn off
+   at the bottom in a deckle edge where the cream page begins. */
 .sky-gradient {
-  background: linear-gradient(
-    180deg,
-    var(--grad-top) 0%,
-    var(--grad-mid) 34%,
-    var(--grad-light) 55%,
-    var(--grad-mid) 76%,
-    var(--grad-bottom) 100%
-  );
+  position: relative;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E"),
+    linear-gradient(165deg, var(--grad-light) 0%, var(--grad-mid) 28%, var(--grad-top) 100%);
+  isolation: isolate;
+}
+.sky-gradient::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 18px;
+  background: var(--paper);
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='18' viewBox='0 0 42 18'%3E%3Cpath d='M0,18 C2,9 4,15 6,8 C8,14 10,4 12,11 C14,17 16,7 18,13 C20,5 22,12 24,6 C26,15 28,9 30,3 C32,10 34,16 36,7 C38,13 40,5 42,10 L42,18 Z' fill='%23fff'/%3E%3C/svg%3E")
+    repeat-x bottom / 42px 18px;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='42' height='18' viewBox='0 0 42 18'%3E%3Cpath d='M0,18 C2,9 4,15 6,8 C8,14 10,4 12,11 C14,17 16,7 18,13 C20,5 22,12 24,6 C26,15 28,9 30,3 C32,10 34,16 36,7 C38,13 40,5 42,10 L42,18 Z' fill='%23fff'/%3E%3C/svg%3E")
+    repeat-x bottom / 42px 18px;
 }
 
 /* ---------- Buttons ---------- */
@@ -152,8 +166,8 @@ img {
   top: 0;
   z-index: 50;
   backdrop-filter: blur(10px);
-  background: rgba(9, 22, 44, 0.72);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: color-mix(in srgb, var(--grad-top) 90%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
 }
 .nav-inner {
   display: flex;
@@ -232,18 +246,18 @@ img {
 }
 
 .card {
-  background: #fff;
+  background: #fffaf1;
   border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 12px 40px rgba(16, 35, 63, 0.1);
-  border: 1px solid rgba(16, 35, 63, 0.06);
+  box-shadow: 0 12px 40px rgba(43, 32, 19, 0.1);
+  border: 1px solid rgba(43, 32, 19, 0.06);
   display: flex;
   flex-direction: column;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 50px rgba(16, 35, 63, 0.16);
+  box-shadow: 0 20px 50px rgba(43, 32, 19, 0.16);
 }
 .card-media {
   aspect-ratio: 3 / 4;
@@ -312,8 +326,8 @@ img {
   font-size: 1rem;
   padding: 0.7rem 0.85rem;
   border-radius: 10px;
-  border: 1px solid rgba(16, 35, 63, 0.18);
-  background: #fff;
+  border: 1px solid rgba(43, 32, 19, 0.18);
+  background: #fffaf1;
   color: var(--ink);
   width: 100%;
 }
@@ -326,7 +340,7 @@ img {
 .select:focus {
   outline: none;
   border-color: var(--accent-strong);
-  box-shadow: 0 0 0 3px rgba(233, 169, 77, 0.25);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-strong) 25%, transparent);
 }
 
 .notice {
@@ -381,11 +395,11 @@ img {
 
 /* ---------- Q&A ---------- */
 .qa-item {
-  background: #fff;
+  background: #fffaf1;
   border-radius: 16px;
   padding: 1.5rem 1.6rem;
-  box-shadow: 0 10px 30px rgba(16, 35, 63, 0.08);
-  border: 1px solid rgba(16, 35, 63, 0.06);
+  box-shadow: 0 10px 30px rgba(43, 32, 19, 0.08);
+  border: 1px solid rgba(43, 32, 19, 0.06);
 }
 .qa-q {
   font-family: var(--font-serif);
@@ -430,7 +444,7 @@ img {
     left: 0;
     right: 0;
     flex-direction: column;
-    background: rgba(9, 22, 44, 0.96);
+    background: color-mix(in srgb, var(--grad-top) 97%, transparent);
     padding: 1rem 6vw 1.4rem;
     gap: 1rem;
   }
