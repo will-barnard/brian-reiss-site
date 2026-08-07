@@ -9,6 +9,7 @@ const blurb = computed(() => (store.settings.merch || {}).blurb || '');
 </script>
 
 <template>
+<div class="route-page">
   <section class="page-head sky-gradient">
     <div class="container">
       <p class="eyebrow" style="color: var(--accent)">Shop</p>
@@ -51,6 +52,7 @@ const blurb = computed(() => (store.settings.merch || {}).blurb || '');
       </p>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>

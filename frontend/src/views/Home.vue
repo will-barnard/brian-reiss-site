@@ -10,6 +10,7 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
 </script>
 
 <template>
+<div class="route-page">
   <section class="hero sky-gradient">
     <div class="container hero-inner">
       <div class="hero-copy">
@@ -80,6 +81,7 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
       </router-link>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>
@@ -167,6 +169,19 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
   }
   .hero-art {
     max-width: 320px;
+    margin: 0 auto;
+    order: 1;
+  }
+  .hero-copy {
+    order: 2;
+    text-align: center;
+  }
+  .hero-sub {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-actions {
+    justify-content: center;
   }
 }
 </style>

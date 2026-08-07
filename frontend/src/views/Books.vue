@@ -7,6 +7,7 @@ const books = computed(() => store.books);
 </script>
 
 <template>
+<div class="route-page">
   <section class="page-head sky-gradient">
     <div class="container">
       <p class="eyebrow" style="color: var(--accent)">Bibliography</p>
@@ -39,6 +40,7 @@ const books = computed(() => store.books);
       <p v-if="!books.length" class="muted">No books published yet.</p>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>

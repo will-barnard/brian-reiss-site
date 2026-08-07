@@ -266,6 +266,31 @@ img {
   }
 }
 
+/* ---------- Page transitions ---------- */
+/* Each route's template is wrapped in a single .route-page root so
+   <transition> has exactly one element to animate between pages. */
+.route-page {
+  display: block;
+}
+.page-fade-enter-active,
+.page-fade-leave-active {
+  transition: opacity 0.26s ease, transform 0.26s ease;
+}
+.page-fade-enter-from {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-fade-enter-active,
+  .page-fade-leave-active {
+    transition: none;
+  }
+}
+
 /* ---------- Image transitions ---------- */
 /* Every image eases in on mount instead of popping in the instant its
    bytes arrive — most site imagery sits in a fixed aspect-ratio box

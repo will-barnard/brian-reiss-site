@@ -11,6 +11,7 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
 </script>
 
 <template>
+<div class="route-page">
   <section class="page-head sky-gradient">
     <div class="container">
       <p class="eyebrow" style="color: var(--accent)">Field Journal</p>
@@ -39,6 +40,7 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
       <p v-if="!items.length" class="muted">No appearances logged yet.</p>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>

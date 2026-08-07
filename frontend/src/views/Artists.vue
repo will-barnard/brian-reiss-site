@@ -11,6 +11,7 @@ const blurb = computed(() => (store.settings.artists || {}).blurb || '');
 </script>
 
 <template>
+<div class="route-page">
   <section class="page-head sky-gradient">
     <div class="container">
       <p class="eyebrow" style="color: var(--accent)">Credits</p>
@@ -44,6 +45,7 @@ const blurb = computed(() => (store.settings.artists || {}).blurb || '');
       <p v-if="!artists.length" class="muted">No artists listed yet.</p>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>

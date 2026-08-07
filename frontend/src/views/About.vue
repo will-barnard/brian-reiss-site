@@ -34,6 +34,7 @@ async function submit() {
 </script>
 
 <template>
+<div class="route-page">
   <section class="page-head sky-gradient">
     <div class="container">
       <p class="eyebrow" style="color: var(--accent)">Get to know me</p>
@@ -93,6 +94,7 @@ async function submit() {
       </form>
     </div>
   </section>
+</div>
 </template>
 
 <style scoped>

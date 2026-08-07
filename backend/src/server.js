@@ -189,7 +189,75 @@ app.post('/api/admin/images', requireAuth, upload.single('file'), async (req, re
 });
 
 // ---------------------------------------------------------------------------
-// Admin: generic collection CRUD
+// Admin: questions (answer / publish / delete)
+// ---------------------------------------------------------------------------
+app.put('/api/admin/questions/:id', requireAuth, async (req, res, next) => {
+  try {
+    const fields = ['name', 'question', 'answer', 'published'];
+    const updates = [];
+    const values = [];
+    let i = 1;
+    for (const col of fields) {
+      if (col in req.body) {
+        updates.push(`${col} = $${i++}`);
+        values.push(req.body[col]);
+      }
+    }
+    if (!updates.length) return res.status(400).json({ error: 'Nothing to update' });
+    values.push(parseInt(req.params.id, 10));
+    const { rows } = await pool.query(
+      `UPDATE questions SET ${updates.join(', ')} WHERE id = $${i} RETURNING *`,
+      values
+    );
+    res.json(rows[0]);
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.delete('/api/admin/questions/:id', requireAuth, async (req, res, next) => {
+  try {
+    await pool.query('DELETE FROM questions WHERE id = $1', [
+      parseInt(req.params.id, 10),
+    ]);
+    res.json({ ok: true });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Admin: messages (mark read / delete)
+// ---------------------------------------------------------------------------
+app.put('/api/admin/messages/:id', requireAuth, async (req, res, next) => {
+  try {
+    await pool.query('UPDATE messages SET read = $1 WHERE id = $2', [
+      !!req.body.read,
+      parseInt(req.params.id, 10),
+    ]);
+    res.json({ ok: true });
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.delete('/api/admin/messages/:id', requireAuth, async (req, res, next) => {
+  try {
+    await pool.query('DELETE FROM messages WHERE id = $1', [
+      parseInt(req.params.id, 10),
+    ]);
+    res.json({ ok: true });
+  } catch (e) {
+    next(e);
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Admin: generic collection CRUD (books / merch / appearances / artists).
+// Registered after the questions/messages routes above — those use static
+// path segments ("questions", "messages") that would otherwise be swallowed
+// by the ":type" wildcard here, since Express matches routes in
+// registration order regardless of how specific a segment looks.
 // ---------------------------------------------------------------------------
 function validCollection(req, res, next) {
   if (!COLLECTIONS[req.params.type]) {
@@ -268,70 +336,6 @@ app.post('/api/admin/:type/reorder', requireAuth, async (req, res, next) => {
         parseInt(ids[i], 10),
       ]);
     }
-    res.json({ ok: true });
-  } catch (e) {
-    next(e);
-  }
-});
-
-// ---------------------------------------------------------------------------
-// Admin: questions (answer / publish / delete)
-// ---------------------------------------------------------------------------
-app.put('/api/admin/questions/:id', requireAuth, async (req, res, next) => {
-  try {
-    const fields = ['name', 'question', 'answer', 'published'];
-    const updates = [];
-    const values = [];
-    let i = 1;
-    for (const col of fields) {
-      if (col in req.body) {
-        updates.push(`${col} = $${i++}`);
-        values.push(req.body[col]);
-      }
-    }
-    if (!updates.length) return res.status(400).json({ error: 'Nothing to update' });
-    values.push(parseInt(req.params.id, 10));
-    const { rows } = await pool.query(
-      `UPDATE questions SET ${updates.join(', ')} WHERE id = $${i} RETURNING *`,
-      values
-    );
-    res.json(rows[0]);
-  } catch (e) {
-    next(e);
-  }
-});
-
-app.delete('/api/admin/questions/:id', requireAuth, async (req, res, next) => {
-  try {
-    await pool.query('DELETE FROM questions WHERE id = $1', [
-      parseInt(req.params.id, 10),
-    ]);
-    res.json({ ok: true });
-  } catch (e) {
-    next(e);
-  }
-});
-
-// ---------------------------------------------------------------------------
-// Admin: messages (mark read / delete)
-// ---------------------------------------------------------------------------
-app.put('/api/admin/messages/:id', requireAuth, async (req, res, next) => {
-  try {
-    await pool.query('UPDATE messages SET read = $1 WHERE id = $2', [
-      !!req.body.read,
-      parseInt(req.params.id, 10),
-    ]);
-    res.json({ ok: true });
-  } catch (e) {
-    next(e);
-  }
-});
-
-app.delete('/api/admin/messages/:id', requireAuth, async (req, res, next) => {
-  try {
-    await pool.query('DELETE FROM messages WHERE id = $1', [
-      parseInt(req.params.id, 10),
-    ]);
     res.json({ ok: true });
   } catch (e) {
     next(e);
