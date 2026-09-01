@@ -136,6 +136,16 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
   background: rgba(255, 255, 255, 0.12);
   font-family: var(--font-serif);
 }
+/* Recent Books cards link out to the full book, so long descriptions are
+   clamped to a few lines here rather than given a "Show more" toggle
+   (a toggle button nested inside the card's own link would be awkward). */
+.card-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .tiles {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
