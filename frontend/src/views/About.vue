@@ -1,15 +1,23 @@
 <script setup>
-import { computed, reactive } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { store } from '../store';
 import { imageUrl, apiSend } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const s = computed(() => store.settings || {});
 const about = computed(() => s.value.about || {});
 const contact = computed(() => s.value.contact || {});
 const img = computed(() => imageUrl(about.value.imageId));
-const paragraphs = computed(() =>
-  (about.value.body || '').split('\n').filter((p) => p.trim())
-);
+
+const aboutExpanded = ref(false);
+const aboutIsLong = computed(() => isTextLong(about.value.body));
+const paragraphs = computed(() => {
+  const full = about.value.body || '';
+  if (aboutExpanded.value || !aboutIsLong.value) {
+    return full.split('\n').filter((p) => p.trim());
+  }
+  return [truncateText(full.replace(/\n+/g, ' '))];
+});
 
 const form = reactive({ name: '', email: '', body: '' });
 const state = reactive({ sending: false, ok: false, err: '' });
@@ -50,6 +58,13 @@ async function submit() {
       </div>
       <div>
         <p v-for="(p, i) in paragraphs" :key="i" class="about-para">{{ p }}</p>
+        <button
+          v-if="aboutIsLong"
+          class="show-more-btn"
+          @click="aboutExpanded = !aboutExpanded"
+        >
+          {{ aboutExpanded ? 'Show less' : 'Show more' }}
+        </button>
       </div>
     </div>
   </section>

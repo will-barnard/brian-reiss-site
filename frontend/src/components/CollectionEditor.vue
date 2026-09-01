@@ -42,7 +42,9 @@ async function add() {
   err.value = '';
   try {
     const row = await apiSend('POST', `/admin/${props.type}`);
-    items.value.push(row);
+    // New items are created at the top of the list on the backend
+    // (lowest sort_order) — mirror that here so the UI doesn't jump.
+    items.value.unshift(row);
   } catch (e) {
     err.value = e.message;
   }

@@ -1,13 +1,29 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { store } from '../store';
 import { imageUrl } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const items = computed(() => store.appearances);
 const heading = computed(
   () => (store.settings.appearances || {}).heading || 'Public Appearances'
 );
 const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
+
+const expanded = reactive(new Set());
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+}
+// Journal entries can run long — collapse to a single truncated blurb by
+// default and only show the full, paragraph-by-paragraph entry once expanded.
+function bodyParagraphsFor(a) {
+  const full = a.body || '';
+  if (expanded.has(a.id) || !isTextLong(full)) {
+    return full.split('\n').filter((p) => p.trim());
+  }
+  return [truncateText(full.replace(/\n+/g, ' '))];
+}
 </script>
 
 <template>
@@ -32,9 +48,16 @@ const blurb = computed(() => (store.settings.appearances || {}).blurb || '');
           <div v-if="a.image_id" class="entry-img">
             <img :src="imageUrl(a.image_id)" alt="" />
           </div>
-          <p v-for="(p, i) in a.body.split('\n').filter(Boolean)" :key="i">
+          <p v-for="(p, i) in bodyParagraphsFor(a)" :key="i">
             {{ p }}
           </p>
+          <button
+            v-if="isTextLong(a.body)"
+            class="show-more-btn"
+            @click="toggle(a.id)"
+          >
+            {{ expanded.has(a.id) ? 'Show less' : 'Show more' }}
+          </button>
         </div>
       </article>
       <p v-if="!items.length" class="muted">No appearances logged yet.</p>

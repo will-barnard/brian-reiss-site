@@ -1,9 +1,20 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { store } from '../store';
 import { imageUrl } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const books = computed(() => store.books);
+
+const expanded = reactive(new Set());
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+}
+function descriptionFor(b) {
+  if (expanded.has(b.id) || !isTextLong(b.description)) return b.description;
+  return truncateText(b.description);
+}
 </script>
 
 <template>
@@ -25,7 +36,14 @@ const books = computed(() => store.books);
         <div class="book-info">
           <div v-if="b.subtitle" class="card-sub">{{ b.subtitle }}</div>
           <h2>{{ b.title }}</h2>
-          <p class="card-text" style="font-size: 1.05rem">{{ b.description }}</p>
+          <p class="card-text" style="font-size: 1.05rem">{{ descriptionFor(b) }}</p>
+          <button
+            v-if="isTextLong(b.description)"
+            class="show-more-btn"
+            @click="toggle(b.id)"
+          >
+            {{ expanded.has(b.id) ? 'Show less' : 'Show more' }}
+          </button>
           <a
             v-if="b.buy_link"
             :href="b.buy_link"

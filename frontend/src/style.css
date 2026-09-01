@@ -504,6 +504,25 @@ img {
   padding-top: 0.6rem;
 }
 
+/* ---------- Show more / show less toggle ---------- */
+.show-more-btn {
+  display: inline-block;
+  align-self: flex-start;
+  margin: 0.2rem 0 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--accent-strong);
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.show-more-btn:hover {
+  opacity: 0.75;
+}
+
 /* ---------- Forms ---------- */
 .field {
   display: flex;

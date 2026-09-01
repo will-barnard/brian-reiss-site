@@ -267,15 +267,18 @@ function validCollection(req, res, next) {
 }
 
 // Create
+// New rows are inserted at the top of the list (lowest sort_order), so the
+// most recently created item is what admins and visitors see first. Reorder
+// (below) still overrides this whenever someone drags/moves items by hand.
 app.post('/api/admin/:type', requireAuth, validCollection, async (req, res, next) => {
   try {
     const type = req.params.type;
-    const { rows: maxRows } = await pool.query(
-      `SELECT COALESCE(MAX(sort_order), -1) + 1 AS next FROM ${type}`
+    const { rows: minRows } = await pool.query(
+      `SELECT COALESCE(MIN(sort_order), 1) - 1 AS next FROM ${type}`
     );
     const { rows } = await pool.query(
       `INSERT INTO ${type} (sort_order) VALUES ($1) RETURNING *`,
-      [maxRows[0].next]
+      [minRows[0].next]
     );
     res.json(rows[0]);
   } catch (e) {

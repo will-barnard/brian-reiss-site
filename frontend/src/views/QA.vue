@@ -2,9 +2,20 @@
 import { computed, reactive } from 'vue';
 import { store } from '../store';
 import { apiSend } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const qa = computed(() => store.settings.qa || {});
 const questions = computed(() => store.questions);
+
+const expanded = reactive(new Set());
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+}
+function answerFor(q) {
+  if (expanded.has(q.id) || !isTextLong(q.answer)) return q.answer;
+  return truncateText(q.answer);
+}
 
 const form = reactive({ name: '', question: '' });
 const state = reactive({ sending: false, ok: false, err: '' });
@@ -69,7 +80,14 @@ async function submit() {
           <div v-for="q in questions" :key="q.id" class="qa-item">
             <div class="qa-asker">{{ q.name || 'Anonymous' }} asked</div>
             <p class="qa-q">{{ q.question }}</p>
-            <p class="qa-a">{{ q.answer }}</p>
+            <p class="qa-a">{{ answerFor(q) }}</p>
+            <button
+              v-if="isTextLong(q.answer)"
+              class="show-more-btn"
+              @click="toggle(q.id)"
+            >
+              {{ expanded.has(q.id) ? 'Show less' : 'Show more' }}
+            </button>
           </div>
           <p v-if="!questions.length" class="muted">
             No answered questions yet — be the first to ask.

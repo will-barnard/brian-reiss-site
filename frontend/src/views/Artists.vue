@@ -1,13 +1,24 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { store } from '../store';
 import { imageUrl } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const artists = computed(() => store.artists);
 const heading = computed(
   () => (store.settings.artists || {}).heading || 'Collaborators & Artists'
 );
 const blurb = computed(() => (store.settings.artists || {}).blurb || '');
+
+const expanded = reactive(new Set());
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+}
+function blurbFor(a) {
+  if (expanded.has(a.id) || !isTextLong(a.blurb)) return a.blurb;
+  return truncateText(a.blurb);
+}
 </script>
 
 <template>
@@ -30,7 +41,14 @@ const blurb = computed(() => (store.settings.artists || {}).blurb || '');
           </div>
           <div class="artist-body">
             <h3>{{ a.name }}</h3>
-            <p class="card-text">{{ a.blurb }}</p>
+            <p class="card-text">{{ blurbFor(a) }}</p>
+            <button
+              v-if="isTextLong(a.blurb)"
+              class="show-more-btn"
+              @click="toggle(a.id)"
+            >
+              {{ expanded.has(a.id) ? 'Show less' : 'Show more' }}
+            </button>
             <a
               v-if="a.link"
               :href="a.link"

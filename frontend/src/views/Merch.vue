@@ -1,11 +1,22 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { store } from '../store';
 import { imageUrl } from '../api';
+import { isTextLong, truncateText } from '../textUtils';
 
 const merch = computed(() => store.merch);
 const heading = computed(() => (store.settings.merch || {}).heading || 'Merch');
 const blurb = computed(() => (store.settings.merch || {}).blurb || '');
+
+const expanded = reactive(new Set());
+function toggle(id) {
+  if (expanded.has(id)) expanded.delete(id);
+  else expanded.add(id);
+}
+function descriptionFor(m) {
+  if (expanded.has(m.id) || !isTextLong(m.description)) return m.description;
+  return truncateText(m.description);
+}
 </script>
 
 <template>
@@ -28,7 +39,14 @@ const blurb = computed(() => (store.settings.merch || {}).blurb || '');
           </div>
           <div class="card-body">
             <h3>{{ m.title }}</h3>
-            <p class="card-text">{{ m.description }}</p>
+            <p class="card-text">{{ descriptionFor(m) }}</p>
+            <button
+              v-if="isTextLong(m.description)"
+              class="show-more-btn"
+              @click="toggle(m.id)"
+            >
+              {{ expanded.has(m.id) ? 'Show less' : 'Show more' }}
+            </button>
             <div class="card-foot price-row">
               <span class="price">{{ m.price }}</span>
               <a
