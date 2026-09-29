@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { store } from '../store';
 import { imageUrl } from '../api';
+import NewsletterSignup from '../components/NewsletterSignup.vue';
 
 const s = computed(() => store.settings || {});
 const hero = computed(() => s.value.hero || {});
@@ -62,6 +63,12 @@ const heroImg = computed(() => imageUrl(hero.value.imageId));
       <div class="center" style="margin-top: 2.4rem">
         <router-link to="/books" class="btn btn-dark">See all books</router-link>
       </div>
+    </div>
+  </section>
+
+  <section class="section-tight">
+    <div class="container">
+      <NewsletterSignup />
     </div>
   </section>
 
